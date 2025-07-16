@@ -1,0 +1,1 @@
+# Hegelian AI Framework - AI Core Module
