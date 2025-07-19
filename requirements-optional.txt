@@ -1,0 +1,13 @@
+# 可选依赖 - 完整功能
+neo4j==5.15.0
+redis==5.0.1
+psutil
+prometheus-client==0.19.0
+requests==2.31.0
+colorlog==6.8.0
+
+# 机器学习相关（可选）
+# torch
+# numpy
+# pandas
+# scikit-learn

@@ -182,7 +182,7 @@ async def http_exception_handler(request, exc):
     """HTTP exception handler"""
     return JSONResponse(
         status_code=exc.status_code,
-        content={"detail": exc.detail, "timestamp": metrics_collector.get_timestamp()}
+        content={"detail": exc.detail, "timestamp": metrics_collector.get_timestamp() if metrics_collector else None}
     )
 
 @app.exception_handler(Exception)
@@ -191,7 +191,7 @@ async def general_exception_handler(request, exc):
     logger.error(f"Unhandled exception: {exc}")
     return JSONResponse(
         status_code=500,
-        content={"detail": "Internal server error", "timestamp": metrics_collector.get_timestamp()}
+        content={"detail": "Internal server error", "timestamp": metrics_collector.get_timestamp() if metrics_collector else None}
     )
 
 if __name__ == "__main__":

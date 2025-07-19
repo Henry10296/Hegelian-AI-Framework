@@ -2,7 +2,8 @@
 Configuration settings for the Hegelian AI Framework
 """
 
-from pydantic import BaseSettings, Field
+from pydantic_settings import BaseSettings
+from pydantic import Field
 from typing import List, Dict, Any
 import os
 

@@ -1,0 +1,15 @@
+[tool.pylance]
+typeCheckingMode = "basic"
+reportMissingImports = false
+reportOptionalMemberAccess = false
+reportAttributeAccessIssue = false
+
+[tool.pyright]
+typeCheckingMode = "basic"
+reportMissingImports = false
+reportOptionalMemberAccess = false
+reportAttributeAccessIssue = false
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
