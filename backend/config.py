@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     
     # Database settings
     database_url: str = Field(
-        default="sqlite:///./hegelian_ai.db",
+        default="sqlite+aiosqlite:///./hegelian_ai.db",
         env="DATABASE_URL"
     )
     
@@ -55,7 +55,7 @@ class Settings(BaseSettings):
     jwt_expiration_hours: int = 24
     
     # AI Model settings
-    model_cache_dir: str = Field(
+    ai_model_cache_dir: str = Field(
         default="./models",
         env="MODEL_CACHE_DIR"
     )
@@ -85,6 +85,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # 忽略额外的字段
 
 # Global settings instance
 settings = Settings()
@@ -103,7 +104,7 @@ class ProductionSettings(Settings):
 class TestingSettings(Settings):
     """Testing environment settings"""
     debug: bool = True
-    database_url: str = "sqlite:///:memory:"
+    database_url: str = "sqlite+aiosqlite:///:memory:"
     
 def get_settings() -> Settings:
     """Get settings based on environment"""

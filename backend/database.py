@@ -19,7 +19,8 @@ import aiosqlite
 from sqlalchemy import create_engine, MetaData, Table, Column, String, Text, Float, DateTime, JSON
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import TypeDecorator, CHAR
+from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
 import sqlalchemy as sa
 
 from .config import Settings
@@ -29,11 +30,43 @@ logger = logging.getLogger(__name__)
 # SQLAlchemy Base
 Base = declarative_base()
 
+class GUID(TypeDecorator):
+    """Platform-independent GUID type.
+    Uses PostgreSQL's UUID type, otherwise uses CHAR(36), storing as stringified hex values.
+    """
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            return dialect.type_descriptor(PostgresUUID())
+        else:
+            return dialect.type_descriptor(CHAR(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return str(value)
+        else:
+            if not isinstance(value, uuid.UUID):
+                return str(uuid.UUID(value))
+            else:
+                return str(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        else:
+            if not isinstance(value, uuid.UUID):
+                return uuid.UUID(value)
+            return value
+
 class EthicalCaseModel(Base):
     """SQLAlchemy model for ethical cases"""
     __tablename__ = "ethical_cases"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     title = Column(String(255), nullable=False)
     description = Column(Text)
     case_type = Column(String(50))
@@ -59,8 +92,8 @@ class DecisionResultModel(Base):
     """SQLAlchemy model for decision results"""
     __tablename__ = "decision_results"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    case_id = Column(UUID(as_uuid=True), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    case_id = Column(GUID(), nullable=False)
     final_decision = Column(Text)
     confidence_score = Column(Float)
     reasoning_path = Column(JSON)
