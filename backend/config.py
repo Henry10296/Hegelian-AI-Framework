@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     
     # Server settings
     host: str = Field(default="localhost", env="HOST")
-    port: int = Field(default=8000, env="PORT")
+    port: int = Field(default=8001, env="PORT")
     
     # CORS settings
     allowed_origins: List[str] = Field(
@@ -34,9 +34,9 @@ class Settings(BaseSettings):
     # Neo4j settings
     neo4j_config: Dict[str, Any] = Field(
         default={
-            "uri": "bolt://localhost:7687",
-            "username": "neo4j",
-            "password": "password"
+            "uri": Field(default="bolt://localhost:7687", env="NEO4J_URI"),
+            "username": Field(default="neo4j", env="NEO4J_USERNAME"),
+            "password": Field(default="password", env="NEO4J_PASSWORD")
         }
     )
     
