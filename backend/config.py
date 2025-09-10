@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     
     # Server settings
     host: str = Field(default="localhost", env="HOST")
-    port: int = Field(default=8001, env="PORT")
+    port: int = Field(default=8000, env="PORT")
     
     # CORS settings
     allowed_origins: List[str] = Field(
@@ -32,13 +32,18 @@ class Settings(BaseSettings):
     )
     
     # Neo4j settings
-    neo4j_config: Dict[str, Any] = Field(
-        default={
-            "uri": Field(default="bolt://localhost:7687", env="NEO4J_URI"),
-            "username": Field(default="neo4j", env="NEO4J_USERNAME"),
-            "password": Field(default="password", env="NEO4J_PASSWORD")
+    neo4j_uri: str = Field(default="bolt://localhost:7687", env="NEO4J_URI")
+    neo4j_username: str = Field(default="neo4j", env="NEO4J_USERNAME")
+    neo4j_password: str = Field(default="password", env="NEO4J_PASSWORD")
+    
+    @property
+    def neo4j_config(self) -> Dict[str, Any]:
+        """Get Neo4j configuration as dictionary"""
+        return {
+            "uri": self.neo4j_uri,
+            "username": self.neo4j_username,
+            "password": self.neo4j_password
         }
-    )
     
     # Redis settings
     redis_url: str = Field(
