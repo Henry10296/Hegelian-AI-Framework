@@ -13,10 +13,10 @@ import json
 from .models.ethical_case import EthicalCase
 from .models.decision_result import DecisionResult, ThesisResult, AntithesisResult, SynthesisResult
 from .thesis_engine import ThesisEngine
-from .antithesis_engine import AntithesisEngine
-from .synthesis_engine import SynthesisEngine
-from .knowledge_graph import KnowledgeGraphManager
-from .monitoring import PerformanceMonitor
+from .antithesis_engine_simple import SimpleAntithesisEngine
+from .synthesis_engine_simple import SimpleSynthesisEngine
+from .knowledge_graph_simple import SimpleKnowledgeGraphManager
+from .monitoring_simple import SimplePerformanceMonitor
 
 logger = logging.getLogger(__name__)
 
@@ -44,17 +44,17 @@ class DialecticalEngine:
     Main dialectical reasoning engine implementing Hegelian dialectics
     """
     
-    def __init__(self, knowledge_graph_manager: KnowledgeGraphManager, database_manager):
+    def __init__(self, knowledge_graph_manager: SimpleKnowledgeGraphManager, database_manager):
         self.knowledge_graph_manager = knowledge_graph_manager
         self.database_manager = database_manager
         
         # Initialize sub-engines
         self.thesis_engine = ThesisEngine(knowledge_graph_manager)
-        self.antithesis_engine = AntithesisEngine(knowledge_graph_manager)
-        self.synthesis_engine = SynthesisEngine(knowledge_graph_manager)
+        self.antithesis_engine = SimpleAntithesisEngine(knowledge_graph_manager)
+        self.synthesis_engine = SimpleSynthesisEngine(knowledge_graph_manager)
         
         # Performance monitoring
-        self.performance_monitor = PerformanceMonitor()
+        self.performance_monitor = SimplePerformanceMonitor()
         
         # Active processes
         self.active_processes: Dict[str, DialecticalProcess] = {}
@@ -86,7 +86,7 @@ class DialecticalEngine:
             logger.error(f"Failed to initialize Dialectical Engine: {e}")
             raise
     
-    async def process_ethical_case(self, case: EthicalCase) -> DecisionResult:
+    async def process_ethical_case(self, case: EthicalCase, ai_config=None) -> DecisionResult:
         """
         Process an ethical case through dialectical reasoning
         
@@ -117,20 +117,20 @@ class DialecticalEngine:
             
             # Stage 1: Thesis - Analyze current ethical norms
             logger.info(f"Starting thesis stage for case {case.case_id}")
-            thesis_result = await self._execute_thesis_stage(case, process)
+            thesis_result = await self._execute_thesis_stage(case, process, process_id, ai_config)
             process.thesis_result = thesis_result
             process.stage = DialecticalStage.ANTITHESIS
             
             # Stage 2: Antithesis - Generate opposing views
             logger.info(f"Starting antithesis stage for case {case.case_id}")
-            antithesis_result = await self._execute_antithesis_stage(case, thesis_result, process)
+            antithesis_result = await self._execute_antithesis_stage(case, thesis_result, process, process_id, ai_config)
             process.antithesis_result = antithesis_result
             process.stage = DialecticalStage.SYNTHESIS
             
             # Stage 3: Synthesis - Integrate and resolve
             logger.info(f"Starting synthesis stage for case {case.case_id}")
             synthesis_result = await self._execute_synthesis_stage(
-                case, thesis_result, antithesis_result, process
+                case, thesis_result, antithesis_result, process, process_id, ai_config
             )
             process.synthesis_result = synthesis_result
             process.stage = DialecticalStage.COMPLETED
@@ -175,19 +175,19 @@ class DialecticalEngine:
             await self.performance_monitor.record_error(process_id, str(e))
             raise
     
-    async def _execute_thesis_stage(self, case: EthicalCase, process: DialecticalProcess) -> ThesisResult:
+    async def _execute_thesis_stage(self, case: EthicalCase, process: DialecticalProcess, process_id: str, ai_config=None) -> ThesisResult:
         """Execute the thesis stage of dialectical reasoning"""
         try:
             # Measure performance
             start_time = datetime.now()
             
             # Execute thesis reasoning
-            thesis_result = await self.thesis_engine.analyze_case(case)
+            thesis_result = await self.thesis_engine.analyze_case(case, ai_config)
             
             # Record metrics
             processing_time = (datetime.now() - start_time).total_seconds()
             await self.performance_monitor.record_stage_metrics(
-                process.case_id, "thesis", processing_time, thesis_result.confidence
+                process_id, "thesis", processing_time, thesis_result.confidence
             )
             
             return thesis_result
@@ -200,7 +200,9 @@ class DialecticalEngine:
         self, 
         case: EthicalCase, 
         thesis_result: ThesisResult, 
-        process: DialecticalProcess
+        process: DialecticalProcess,
+        process_id: str,
+        ai_config=None
     ) -> AntithesisResult:
         """Execute the antithesis stage of dialectical reasoning"""
         try:
@@ -208,12 +210,12 @@ class DialecticalEngine:
             start_time = datetime.now()
             
             # Execute antithesis reasoning
-            antithesis_result = await self.antithesis_engine.generate_antithesis(thesis_result)
+            antithesis_result = await self.antithesis_engine.generate_antithesis(thesis_result, ai_config)
             
             # Record metrics
             processing_time = (datetime.now() - start_time).total_seconds()
             await self.performance_monitor.record_stage_metrics(
-                process.case_id, "antithesis", processing_time, antithesis_result.strength
+                process_id, "antithesis", processing_time, antithesis_result.strength
             )
             
             return antithesis_result
@@ -227,7 +229,9 @@ class DialecticalEngine:
         case: EthicalCase, 
         thesis_result: ThesisResult, 
         antithesis_result: AntithesisResult,
-        process: DialecticalProcess
+        process: DialecticalProcess,
+        process_id: str,
+        ai_config=None
     ) -> SynthesisResult:
         """Execute the synthesis stage of dialectical reasoning"""
         try:
@@ -236,13 +240,13 @@ class DialecticalEngine:
             
             # Execute synthesis reasoning
             synthesis_result = await self.synthesis_engine.synthesize(
-                case, thesis_result, antithesis_result
+                case, thesis_result, antithesis_result, ai_config
             )
             
             # Record metrics
             processing_time = (datetime.now() - start_time).total_seconds()
             await self.performance_monitor.record_stage_metrics(
-                process.case_id, "synthesis", processing_time, synthesis_result.confidence
+                process_id, "synthesis", processing_time, synthesis_result.confidence
             )
             
             return synthesis_result
@@ -290,21 +294,27 @@ class DialecticalEngine:
     async def _save_decision_result(self, decision_result: DecisionResult):
         """Save decision result to database"""
         try:
-            # Convert to dictionary for database storage
+            # Create simplified data structure for database storage
             result_data = {
                 "case_id": decision_result.case_id,
                 "final_decision": decision_result.final_decision,
                 "confidence_score": decision_result.confidence_score,
-                "reasoning_path": json.dumps(decision_result.reasoning_path),
                 "processing_time": decision_result.processing_time,
-                "metadata": json.dumps(decision_result.metadata),
-                "created_at": datetime.now()
+                "decision_type": decision_result.decision_type.value,
+                "timestamp": decision_result.timestamp.isoformat(),
+                # Store simplified reasoning path
+                "reasoning_summary": f"Thesis confidence: {decision_result.thesis_result.confidence:.2f}, "
+                                   f"Antithesis strength: {decision_result.antithesis_result.strength:.2f}, "
+                                   f"Synthesis confidence: {decision_result.synthesis_result.confidence:.2f}",
+                "key_principles": [p.name for p in decision_result.thesis_result.key_principles[:3]],
+                "main_challenges": len(decision_result.antithesis_result.challenges),
+                "resolution_strategy": decision_result.synthesis_result.resolution_strategy.strategy_type
             }
             
             await self.database_manager.save_decision_result(result_data)
             
         except Exception as e:
-            logger.error(f"Error saving decision result: {e}")
+            logger.warning(f"Error saving decision result: {e}")
             # Don't raise - saving failure shouldn't stop processing
     
     async def _learn_from_case(self, case: EthicalCase, decision_result: DecisionResult):

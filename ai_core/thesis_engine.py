@@ -9,8 +9,8 @@ from datetime import datetime
 
 from .models.ethical_case import EthicalCase
 from .models.decision_result import ThesisResult, EthicalPrinciple, ReasoningStep
-from .knowledge_graph import KnowledgeGraphManager, KnowledgeNode
-from .monitoring import PerformanceMonitor
+from .knowledge_graph_simple import SimpleKnowledgeGraphManager, KnowledgeNode
+from .monitoring_simple import SimplePerformanceMonitor
 
 logger = logging.getLogger(__name__)
 
@@ -20,9 +20,9 @@ class ThesisEngine:
     analyzing existing ethical norms and principles
     """
     
-    def __init__(self, knowledge_graph_manager: KnowledgeGraphManager):
+    def __init__(self, knowledge_graph_manager: SimpleKnowledgeGraphManager):
         self.knowledge_graph_manager = knowledge_graph_manager
-        self.performance_monitor = PerformanceMonitor()
+        self.performance_monitor = SimplePerformanceMonitor()
         
         # Configuration
         self.config = {
@@ -44,7 +44,7 @@ class ThesisEngine:
             logger.error(f"Failed to initialize Thesis Engine: {e}")
             raise
     
-    async def analyze_case(self, case: EthicalCase) -> ThesisResult:
+    async def analyze_case(self, case: EthicalCase, ai_config=None) -> ThesisResult:
         """
         Analyze an ethical case and generate thesis result
         
