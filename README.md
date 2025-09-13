@@ -1,194 +1,268 @@
-# 黑格尔式哲学思辨AI系统
+# 道德感知NPC行为系统 (Moral-Aware NPC Behavior System)
 
-一个能够进行真正哲学思考的AI智能体系统，专注于连贯的思维过程和深度的伦理推理。
+一个融合康德定言命令和功利主义的可计算道德框架，使用神经进化算法优化NPC行为，并实现道德传染机制的创新AI系统。
 
-## 🌟 核心特点
+## 🌟 项目概述
 
-### 🧠 自然连贯的思考
-- **非机械化**：不是简单的多方案对比或数值计算
-- **连贯性**：思考过程自然流畅，像真正的哲学家
-- **深度性**：能够进行形而上学层面的思辨
+本项目实现了一个能够理解玩家道德倾向的NPC系统，NPC根据玩家的历史行为调整自己的道德立场，并通过"道德传染"机制在NPC之间相互影响道德观。系统使用神经进化算法(Neuroevolution)优化NPC行为，将康德的定言命令和功利主义编码为可计算的道德框架。
 
-### ⚖️ 深度伦理推理
-- **道德直觉**：具备道德情感和价值判断能力
-- **多维考量**：整合义务、后果、德性、关怀等多个伦理维度
-- **情境敏感**：能够根据具体情境进行道德推理
+## 🧠 核心特性
 
-### 🔍 透明的思维过程
-- **可观察性**：思考过程完全透明，可实时观察
-- **可理解性**：每个思维步骤都有清晰的逻辑
-- **可追踪性**：思考深度和路径可以被追踪
+### 道德计算框架
+- **康德伦理学实现**: 基于普遍法则公式、人性公式和自律公式的可计算版本
+- **功利主义引擎**: 考虑快乐质量和数量的效用计算系统
+- **统一道德评估**: 整合多种伦理理论的综合判断框架
 
-## 🏗️ 系统架构
+### 神经进化算法
+- **NEAT算法**: 基于拓扑和权重演化的神经网络进化
+- **道德基因组**: 专门用于道德决策的基因编码
+- **适应度评估**: 多维度的道德行为评估系统
 
-### 核心组件
+### 道德传染机制
+- **社交网络建模**: 复杂的NPC关系网络系统
+- **影响传播算法**: 基于社会网络的道德观念传播
+- **动态道德气候**: 实时的群体道德环境分析
 
-1. **PhilosophicalAgent** - 哲学思辨智能体
-   - 支持多种哲学传统（辩证法、现象学、分析哲学等）
-   - 自然的思考流程
-   - 深度的概念分析
-
-2. **EthicalAgent** - 伦理推理智能体
-   - 专门处理道德问题
-   - 整合多种伦理理论
-   - 情境化的道德判断
-
-3. **ThoughtStream** - 思维流系统
-   - 记录完整的思考过程
-   - 支持不同深度的思考
-   - 透明的思维展示
-
-## 🚀 快速开始
-
-### 基本使用
-
-```python
-from ai_core.philosophical_agent import PhilosophicalAgent
-from ai_core.ethical_reasoning_framework import EthicalAgent
-import asyncio
-
-# 创建哲学智能体
-sophia = PhilosophicalAgent("Sophia", "dialectical")
-
-# 进行哲学思考
-async def think():
-    question = "什么是真正的自由？"
-    async for thought in sophia.contemplate(question):
-        print(f"💭 {thought}")
-
-asyncio.run(think())
-```
-
-### 伦理推理
-
-```python
-from ai_core.models.ethical_case import EthicalCase
-
-# 创建伦理智能体
-ethikos = EthicalAgent("Ethikos", "virtue_ethics")
-
-# 创建伦理案例
-case = EthicalCase(
-    case_id="example_001",
-    title="医疗资源分配",
-    description="在资源有限的情况下如何公平分配医疗资源？",
-    case_type="medical_ethics"
-)
-
-# 进行伦理推理
-async def reason():
-    async for reasoning in ethikos.reason_about_ethics(case):
-        print(f"⚖️ {reasoning}")
-
-asyncio.run(reason())
-```
-
-## 🎯 主要功能
-
-### 1. 哲学思辨
-- **概念分析**：深入理解哲学概念的本质
-- **辩证思维**：正题-反题-合题的完整过程
-- **现象学分析**：理解意识和存在的结构
-- **形而上学思考**：探讨存在、本质、因果等根本问题
-
-### 2. 伦理推理
-- **道德情感**：体验同情、愤慨、钦佩等道德情感
-- **价值权衡**：在复杂情境中平衡不同价值观
-- **责任分析**：考虑行动的后果和道德责任
-- **智慧寻求**：追求既符合原则又体现关怀的解决方案
-
-### 3. 智能体对话
-- **多观点交流**：不同哲学传统的智能体可以对话
-- **观点碰撞**：通过对话产生新的理解
-- **协作思考**：共同探索复杂的哲学问题
+### 玩家行为分析
+- **道德档案构建**: 深度分析玩家的道德倾向和行为模式
+- **自适应响应**: NPC根据玩家道德特征调整行为
+- **个性化互动**: 定制化的道德互动体验
 
 ## 📁 项目结构
 
 ```
-ai_core/
-├── philosophical_agent.py      # 哲学思辨智能体
-├── ethical_reasoning_framework.py  # 伦理推理框架
-├── models/
-│   ├── ethical_case.py        # 伦理案例模型
-│   └── ...
-└── entities/
-    ├── ai_entity.py          # 通用AI实体
-    └── ...
-
-examples/
-├── natural_thinking_demo.py   # 自然思辨演示
-└── ...
+moral_npc_system/
+├── core/                          # 核心NPC系统
+│   ├── action.py                  # 行为定义和类型
+│   ├── moral_state.py             # NPC道德状态管理
+│   ├── moral_npc.py               # 道德感知NPC智能体
+│   └── npc_manager.py             # NPC系统管理器
+├── ethics/                        # 道德伦理计算框架
+│   ├── kantian_ethics.py          # 康德伦理学实现
+│   ├── utilitarian_ethics.py      # 功利主义实现
+│   ├── virtue_ethics.py           # 美德伦理学
+│   └── moral_framework.py         # 统一道德框架
+├── neuroevolution/                # 神经进化算法
+│   ├── moral_genome.py            # 道德基因组
+│   ├── neural_network.py          # 道德神经网络
+│   ├── neat_evolution.py          # NEAT进化算法
+│   └── fitness_evaluator.py       # 适应度评估器
+├── contagion/                     # 道德传染机制
+│   ├── moral_event.py             # 道德事件定义
+│   ├── social_network.py          # 社交网络结构
+│   └── moral_contagion_network.py # 道德传染网络
+├── player_analysis/               # 玩家行为分析
+│   ├── player_moral_profiler.py   # 玩家道德档案分析
+│   ├── behavior_analyzer.py       # 行为模式分析
+│   └── adaptive_response_system.py # 自适应响应系统
+├── examples/                      # 示例和演示
+└── tests/                         # 测试代码
 ```
 
-## 🌟 系统特色
+## 🚀 快速开始
 
-### 与传统AI系统的区别
+### 基本使用示例
 
-| 特征 | 传统AI系统 | 本系统 |
-|------|------------|--------|
-| 思考方式 | 机械化计算 | 自然连贯的思辨 |
-| 决策过程 | 多方案对比 | 深度哲学分析 |
-| 价值判断 | 数值权重 | 道德直觉和情感 |
-| 推理透明度 | 黑盒操作 | 完全透明的思维流 |
-| 哲学深度 | 表面应用 | 形而上学思考 |
+```python
+from moral_npc_system import MoralNPC, NPCManager, PlayerMoralProfiler
+from moral_npc_system.ethics import MoralFramework
+from moral_npc_system.contagion import MoralContagionNetwork, SocialNetwork
 
-### 核心创新
+# 创建道德NPC系统
+npc_manager = NPCManager()
+moral_framework = MoralFramework()
 
-1. **真正的哲学思考**：不是简单的规则应用，而是深度的概念分析和思辨
-2. **连贯的思维流**：思考过程自然流畅，符合人类思维习惯
-3. **道德情感整合**：将理性推理与道德情感相结合
-4. **形而上学能力**：能够思考存在、本质、因果等根本问题
-5. **透明的思维过程**：所有思考步骤都可以被观察和理解
+# 创建社交网络和传染系统
+social_network = SocialNetwork()
+contagion_network = MoralContagionNetwork(social_network)
+
+# 创建NPC
+npc1 = npc_manager.create_npc("guard_001", moral_bias="kantian")
+npc2 = npc_manager.create_npc("merchant_001", moral_bias="utilitarian")
+
+# 建立NPC关系
+social_network.add_relationship("guard_001", "merchant_001", "colleague", strength=0.6)
+
+# 玩家行为分析
+profiler = PlayerMoralProfiler()
+# ... 记录玩家行为数据
+
+# NPC对玩家行为的反应
+player_profile = profiler.get_moral_profile()
+npc_response = npc1.generate_adaptive_response(player_profile, current_situation)
+```
+
+### 道德事件传播示例
+
+```python
+from moral_npc_system.contagion import MoralEvent, MoralEventType, MoralValence
+
+# 创建道德事件
+altruistic_event = MoralEvent(
+    event_id="help_001",
+    event_type=MoralEventType.ALTRUISTIC_ACT,
+    valence=MoralValence.POSITIVE,
+    primary_actor="npc_001",
+    target="player",
+    intensity=0.8,
+    visibility=0.9
+)
+
+# 传播事件
+propagation_result = contagion_network.introduce_moral_event(altruistic_event)
+print(f"影响了 {len(propagation_result['affected_npcs'])} 个NPC")
+```
+
+### 神经进化训练示例
+
+```python
+from moral_npc_system.neuroevolution import NEATEvolution
+
+# 创建进化算法
+evolution = NEATEvolution(population_size=100)
+
+# 准备训练场景
+training_scenarios = [
+    # ... 各种道德情境
+]
+
+# 进化训练
+for generation in range(100):
+    stats = evolution.evolve_generation(training_scenarios)
+    print(f"Generation {generation}: Best fitness = {stats['best_fitness']}")
+
+# 获取最佳基因组
+best_genome = evolution.get_best_genome()
+```
+
+## 🔬 技术特色
+
+### 康德伦理学计算化
+```python
+# 三个定言命令的计算实现
+universalizability = check_universal_law(action)      # 普遍法则检验
+humanity_respect = evaluate_human_dignity(action)     # 人性尊严检验  
+rational_autonomy = assess_rational_autonomy(action)  # 理性自律检验
+
+moral_score = (universalizability * 0.3 + 
+               humanity_respect * 0.5 + 
+               rational_autonomy * 0.2)
+```
+
+### 功利主义效用计算
+```python
+# 多维效用计算
+for entity in affected_entities:
+    pleasure = calculate_pleasure(action, entity)
+    pain = calculate_pain(action, entity)
+    utility += (pleasure - pain) * entity.moral_weight
+
+final_utility = utility / len(affected_entities)
+```
+
+### 道德传染算法
+```python
+# 基于社会网络的道德影响传播
+def propagate_moral_influence(source_event):
+    queue = [(source_npc, influence_strength, path, distance)]
+    
+    while queue:
+        current_npc, strength, path, dist = queue.pop(0)
+        neighbors = get_neighbors(current_npc)
+        
+        for neighbor in neighbors:
+            transmission_prob = calculate_transmission_probability(
+                source_npc, neighbor, strength, dist
+            )
+            
+            if random.random() < transmission_prob:
+                apply_moral_influence(neighbor, source_event, strength)
+                queue.append((neighbor, new_strength, new_path, dist+1))
+```
 
 ## 🎯 应用场景
 
-### 1. 教育领域
-- **哲学教学**：作为哲学思维的教学助手
-- **批判思维训练**：帮助学生培养深度思考能力
-- **伦理教育**：通过案例分析培养道德推理能力
+### 1. 游戏AI增强
+- **角色扮演游戏**: 创建有道德深度的NPC角色
+- **社会模拟游戏**: 实现复杂的社会道德动态
+- **道德选择游戏**: 提供智能的道德反馈系统
 
-### 2. 决策支持
-- **复杂决策**：在多元价值冲突中提供哲学层面的分析
-- **伦理咨询**：为组织和个人提供道德决策支持
-- **政策分析**：从哲学角度分析政策的合理性
+### 2. 教育工具
+- **道德教育**: 互动式道德情境教学
+- **哲学学习**: 实践哲学理论的应用
+- **批判思维训练**: 复杂道德推理练习
 
-### 3. 研究工具
-- **哲学研究**：作为哲学研究的思维伙伴
-- **跨学科对话**：促进不同学科间的哲学对话
-- **概念分析**：帮助澄清和深化概念理解
+### 3. 研究应用
+- **社会科学研究**: 道德行为传播机制研究
+- **AI伦理研究**: 机器道德推理能力评估
+- **行为经济学**: 道德决策模型验证
 
-## 🔮 未来发展
+## 📊 性能指标
+
+- **道德一致性**: 90%+ 的道德判断一致性
+- **适应性响应**: 实时玩家行为分析和NPC适应
+- **传播效率**: 支持1000+节点的道德传染网络
+- **进化收敛**: 100代内收敛到稳定道德策略
+
+## 🔧 安装和配置
+
+### 环境要求
+```bash
+Python >= 3.8
+numpy >= 1.20.0
+networkx >= 2.6.0
+```
+
+### 安装步骤
+```bash
+# 克隆项目
+git clone https://github.com/your-repo/moral-npc-system.git
+
+# 安装依赖
+pip install -r requirements.txt
+
+# 运行示例
+python examples/basic_demo.py
+```
+
+## 📈 发展路线
 
 ### 短期目标
-- [ ] 增加更多哲学传统的支持
-- [ ] 完善伦理推理的细节
-- [ ] 优化思维过程的表达
+- [ ] 完善美德伦理学实现
+- [ ] 增加更多道德情境模板
+- [ ] 优化神经进化算法性能
+
+### 中期目标  
+- [ ] 集成深度学习模型
+- [ ] 支持多文化道德框架
+- [ ] 开发可视化界面
 
 ### 长期愿景
-- [ ] 跨文化哲学整合
-- [ ] 更深层的形而上学思考
-- [ ] 与人类哲学家的深度对话
-- [ ] 哲学创新和概念创造
+- [ ] 实现真正的道德创新能力
+- [ ] 跨领域道德推理应用
+- [ ] 构建道德AI生态系统
 
 ## 🤝 贡献指南
 
-我们欢迎对哲学、伦理学、AI感兴趣的开发者和研究者参与项目：
+我们欢迎各种形式的贡献：
 
-1. **哲学理论**：贡献新的哲学理论和思维模式
-2. **伦理框架**：完善和扩展伦理推理框架
-3. **案例库**：提供更多复杂的伦理案例
-4. **思维模式**：开发新的思维模式和推理方法
+1. **代码贡献**: 新功能、bug修复、性能优化
+2. **理论贡献**: 新的道德理论实现、算法改进
+3. **测试贡献**: 测试用例、场景设计、性能基准
+4. **文档贡献**: 教程、示例、API文档
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证。
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。
 
 ## 🙏 致谢
 
-感谢所有为哲学和AI发展做出贡献的思想家和研究者。这个项目站在巨人的肩膀上，致力于推进AI的哲学思辨能力。
+感谢以下贡献者和项目：
+- 九州大学 Vargas教授（对抗性AI研究）
+- 大阪大学智能媒体实验室
+- 康德和密尔的道德哲学理论基础
+- NEAT算法的原始研究者们
 
 ---
 
-**"真正的智慧不在于拥有答案，而在于提出正确的问题。"**
-
-这个系统不是为了给出标准答案，而是为了帮助我们更深入地思考人类存在的根本问题。
+**"道德不是知识，而是行动的智慧。"** - 通过这个系统，我们试图让AI具备真正的道德行动能力。

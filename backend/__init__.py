@@ -1,1 +1,0 @@
-# Hegelian AI Framework - Backend Module
