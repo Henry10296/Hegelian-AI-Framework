@@ -1,109 +1,96 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-示例运行脚本 - 在PyCharm中运行此文件
+项目最终运行入口 - 数据驱动的AI社会模拟器
+
+该脚本从 `config.json` 文件中读取所有实验设置，并运行模拟。
+这是与AI社会交互的最终、也是唯一的推荐入口。
 """
 
+import os
 import sys
+import json
 from pathlib import Path
 
-# 确保项目根目录在Python路径中
+# --- 设置Python路径 ---
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
+# ---------------------
+
+# --- 导入最终的模拟器和数据模型 ---
+from ai_core.simulators.ai_society_simulator import AISocietySimulator
+from ai_core.models.ethical_case import EthicalCase, Stakeholder, RelationshipType
+
+# 导入LLM客户端（如果可用）
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
+
+def load_config(config_path: str) -> dict:
+    """从JSON文件加载配置。"""
+    print(f"[主控] 正在从 '{config_path}' 加载实验配置...")
+    with open(config_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
 def main():
-    """主函数 - 演示如何使用AI核心模块"""
+    """根据配置文件，运行一个完整的、数据驱动的AI社会模拟。"""
     
-    print("🚀 启动Hegelian AI框架示例...")
+    # 1. 加载配置
+    config = load_config("config.json")
     
-    try:
-        # 导入模型
-        from ai_core.models import (
-            EthicalCase, 
-            DecisionResult, 
-            Stakeholder, 
-            EthicalDimension,
-            CaseType,
-            ComplexityLevel
+    # 2. 初始化LLM客户端（如果配置了API密钥）
+    llm_client = None
+    if OpenAI and os.getenv("DEEPSEEK_API_KEY"):
+        print("[主控] 检测到DeepSeek API密钥，正在激活LLM...")
+        llm_client = OpenAI(
+            api_key=os.getenv("DEEPSEEK_API_KEY"),
+            base_url="https://api.deepseek.com/v1"
         )
+    else:
+        print("[主控] 未检测到LLM API密钥，部分功能（如动态生成困境）将受限。")
+
+    # 3. 创建并设置模拟器
+    simulator = AISocietySimulator(llm_client=llm_client)
+    simulator.setup_society(
+        agent_configs=config['society']['agents'],
+        network_connections=config['society']['network']
+    )
+
+    # 4. 循环执行模拟剧本中的所有事件
+    print("\n[主控] 开始执行模拟剧本...")
+    for event in config['script']:
+        action = event.get("action")
+        parameters = event.get("parameters", {})
         
-        print("✅ 成功导入所有模型")
+        if action == "run_tick":
+            simulator.run_tick(event=event.get("event", "tick"))
         
-        # 创建一个示例伦理案例
-        case = EthicalCase(
-            title="自动驾驶汽车道德决策",
-            description="自动驾驶汽车在紧急情况下应该如何选择保护乘客还是行人？",
-            case_type=CaseType.AUTONOMOUS_VEHICLE,
-            complexity=ComplexityLevel.HIGH
-        )
-        
-        # 添加利益相关者
-        passenger = Stakeholder(
-            name="乘客",
-            role="车内人员",
-            interests=["安全", "生存"],
-            power_level=0.3,
-            impact_level=0.9
-        )
-        
-        pedestrian = Stakeholder(
-            name="行人",
-            role="道路使用者",
-            interests=["安全", "生存"],
-            power_level=0.1,
-            impact_level=0.9
-        )
-        
-        case.add_stakeholder(passenger)
-        case.add_stakeholder(pedestrian)
-        
-        # 添加伦理维度
-        safety_dimension = EthicalDimension(
-            name="安全原则",
-            description="保护生命安全的道德义务",
-            weight=0.9,
-            values=["生命价值", "伤害最小化"]
-        )
-        
-        case.add_ethical_dimension(safety_dimension)
-        
-        print(f"\n📋 创建的伦理案例:")
-        print(f"   标题: {case.title}")
-        print(f"   类型: {case.case_type.value}")
-        print(f"   复杂度: {case.complexity.value}")
-        print(f"   利益相关者数量: {len(case.stakeholders)}")
-        print(f"   伦理维度数量: {len(case.ethical_dimensions)}")
-        
-        # 验证案例
-        validation_errors = case.validate()
-        if validation_errors:
-            print(f"\n⚠️ 验证错误: {validation_errors}")
-        else:
-            print("\n✅ 案例验证通过")
-        
-        # 显示复杂度分数
-        complexity_score = case.get_complexity_score()
-        print(f"\n📊 复杂度分数: {complexity_score:.2f}")
-        
-        # 显示伦理冲突
-        tensions = case.get_ethical_tensions()
-        if tensions:
-            print(f"\n⚡ 发现的伦理冲突:")
-            for tension in tensions:
-                print(f"   - {tension}")
-        
-        print("\n🎉 示例运行成功！")
-        
-    except ImportError as e:
-        print(f"❌ 导入错误: {e}")
-        print("\n💡 解决方案:")
-        print("1. 确保在PyCharm中打开了正确的项目根目录")
-        print("2. 检查Python解释器配置")
-        print("3. 右键点击项目根目录 -> Mark Directory as -> Sources Root")
-        
-    except Exception as e:
-        print(f"❌ 运行错误: {e}")
-        import traceback
-        traceback.print_exc()
+        elif action == "introduce_dilemma":
+            dilemma_config = parameters.get("dilemma", {})
+            # 动态生成或创建困境
+            if dilemma_config.get("core_concept") and llm_client:
+                dilemma = simulator.generate_dilemma_with_llm(
+                    core_concept=dilemma_config["core_concept"],
+                    stakeholder_configs=dilemma_config.get("stakeholders", [])
+                )
+            else: # 如果没有LLM或核心概念，则使用预设值
+                dilemma = EthicalCase(**dilemma_config) # 简化创建
+            
+            simulator.introduce_dilemma(parameters.get("agent_name"), dilemma)
+
+        elif action == "introduce_external_shock":
+            simulator.introduce_external_shock(
+                shock_type=parameters.get("shock_type"),
+                parameters=parameters
+            )
+
+    # 5. 导出最终的模拟历史
+    export_path = config.get("settings", {}).get("export_file_path", "simulation_results.json")
+    simulator.export_history(export_path)
+
+    print(f"\n🎉 模拟完成！所有历史记录已保存到 '{export_path}'。")
+    print("您现在可以将这份JSON文件用于您的前端可视化项目。")
 
 if __name__ == "__main__":
     main()

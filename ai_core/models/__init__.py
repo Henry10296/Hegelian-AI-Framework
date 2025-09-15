@@ -1,57 +1,30 @@
+# -*- coding: utf-8 -*-
 """
 AI Core Models Package
+
+该包定义了AI决策所需的核心数据结构。
 """
 
+# 从其各自的文件中导入所有模型
 from .ethical_case import (
     EthicalCase,
+    ActionOption,
     Stakeholder,
-    EthicalDimension,
-    ContextualFactor,
     CaseType,
-    ComplexityLevel,
-    CulturalContext
+    RelationshipType
 )
+from .moral_genome import MoralGenome
 
-from .decision_result import (
-    DecisionResult,
-    ThesisResult,
-    AntithesisResult,
-    SynthesisResult,
-    EthicalPrinciple,
-    ReasoningStep,
-    EthicalChallenge,
-    ConflictScenario,
-    ResolutionStrategy,
-    IntegratedPrinciple,
-    DecisionType,
-    ConfidenceLevel
-)
-
+# __all__ 定义了当其他模块使用 'from ai_core.models import *' 时，哪些名称会被导入。
+# 这是一个最佳实践，用于明确地声明包的公共API。
 __all__ = [
-    # Main classes
+    # from ethical_case
     'EthicalCase',
-    'DecisionResult',
-    'ThesisResult',
-    'AntithesisResult',
-    'SynthesisResult',
-    
-    # Ethical case components
+    'ActionOption',
     'Stakeholder',
-    'EthicalDimension',
-    'ContextualFactor',
-    
-    # Enums
     'CaseType',
-    'ComplexityLevel',
-    'CulturalContext',
-    'DecisionType',
-    'ConfidenceLevel',
+    'RelationshipType',
     
-    # Decision result components
-    'EthicalPrinciple',
-    'ReasoningStep',
-    'EthicalChallenge',
-    'ConflictScenario',
-    'ResolutionStrategy',
-    'IntegratedPrinciple'
+    # from moral_genome
+    'MoralGenome'
 ]

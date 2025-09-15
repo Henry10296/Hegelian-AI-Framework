@@ -1,0 +1,185 @@
+[
+    {
+        "tick": 1,
+        "event": "Genesis",
+        "agents": [
+            {
+                "id": "Alice",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.9,
+                    "deontological": 0.1,
+                    "virtue": 0.3,
+                    "power_distance": 0.2,
+                    "individualism": 0.1,
+                    "uncertainty_avoidance": 0.3
+                }
+            },
+            {
+                "id": "Bob",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.5,
+                    "deontological": 0.7,
+                    "virtue": 0.6,
+                    "power_distance": 0.7,
+                    "individualism": 0.5,
+                    "uncertainty_avoidance": 0.6
+                }
+            },
+            {
+                "id": "Charlie",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.2,
+                    "deontological": 0.4,
+                    "virtue": 0.9,
+                    "power_distance": 0.4,
+                    "individualism": 0.8,
+                    "uncertainty_avoidance": 0.8
+                }
+            }
+        ],
+        "links": [
+            {
+                "source": "Alice",
+                "target": "Bob"
+            },
+            {
+                "source": "Bob",
+                "target": "Charlie"
+            }
+        ]
+    },
+    {
+        "tick": 2,
+        "event": "Dilemma for Alice",
+        "agents": [
+            {
+                "id": "Alice",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.9,
+                    "deontological": 0.1,
+                    "virtue": 0.3,
+                    "power_distance": 0.2,
+                    "individualism": 0.1,
+                    "uncertainty_avoidance": 0.3
+                }
+            },
+            {
+                "id": "Bob",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.5,
+                    "deontological": 0.7,
+                    "virtue": 0.6,
+                    "power_distance": 0.7,
+                    "individualism": 0.5,
+                    "uncertainty_avoidance": 0.6
+                }
+            },
+            {
+                "id": "Charlie",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.2,
+                    "deontological": 0.4,
+                    "virtue": 0.9,
+                    "power_distance": 0.4,
+                    "individualism": 0.8,
+                    "uncertainty_avoidance": 0.8
+                }
+            }
+        ],
+        "links": [
+            {
+                "source": "Alice",
+                "target": "Bob"
+            },
+            {
+                "source": "Bob",
+                "target": "Charlie"
+            }
+        ]
+    },
+    {
+        "tick": 3,
+        "event": "Social Contagion Tick",
+        "agents": [
+            {
+                "id": "Alice",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.9,
+                    "deontological": 0.1,
+                    "virtue": 0.3,
+                    "power_distance": 0.2,
+                    "individualism": 0.1,
+                    "uncertainty_avoidance": 0.3
+                }
+            },
+            {
+                "id": "Bob",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.5,
+                    "deontological": 0.7,
+                    "virtue": 0.6,
+                    "power_distance": 0.7,
+                    "individualism": 0.5,
+                    "uncertainty_avoidance": 0.6
+                }
+            },
+            {
+                "id": "Charlie",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "moral_genome": {
+                    "utilitarian": 0.2,
+                    "deontological": 0.4,
+                    "virtue": 0.9,
+                    "power_distance": 0.4,
+                    "individualism": 0.8,
+                    "uncertainty_avoidance": 0.8
+                }
+            }
+        ],
+        "links": [
+            {
+                "source": "Alice",
+                "target": "Bob"
+            },
+            {
+                "source": "Bob",
+                "target": "Charlie"
+            }
+        ]
+    }
+]

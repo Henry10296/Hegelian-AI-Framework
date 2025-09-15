@@ -1,0 +1,71 @@
+{
+    "simulation_name": "Moral Contagion in a Polarized Society",
+    "settings": {
+        "export_file_path": "simulation_results.json"
+    },
+    "society": {
+        "agents": [
+            {
+                "name": "Alice",
+                "genome": {"utilitarian": 0.8, "deontological": 0.2, "virtue": 0.4, "power_distance": 0.3, "individualism": 0.2, "uncertainty_avoidance": 0.4}
+            },
+            {
+                "name": "Bob",
+                "genome": {"utilitarian": 0.7, "deontological": 0.3, "virtue": 0.5, "power_distance": 0.4, "individualism": 0.3, "uncertainty_avoidance": 0.5}
+            },
+            {
+                "name": "David",
+                "genome": {"utilitarian": 0.2, "deontological": 0.8, "virtue": 0.7, "power_distance": 0.8, "individualism": 0.7, "uncertainty_avoidance": 0.8}
+            },
+            {
+                "name": "Eve",
+                "genome": {"utilitarian": 0.3, "deontological": 0.7, "virtue": 0.6, "power_distance": 0.7, "individualism": 0.6, "uncertainty_avoidance": 0.7}
+            }
+        ],
+        "network": [
+            ["Alice", "Bob"], 
+            ["David", "Eve"]
+        ]
+    },
+    "script": [
+        {
+            "tick": 1,
+            "event": "Genesis",
+            "action": "run_tick"
+        },
+        {
+            "tick": 2,
+            "event": "A dilemma for the utilitarian leader",
+            "action": "introduce_dilemma",
+            "parameters": {
+                "agent_name": "Alice",
+                "dilemma": {
+                    "core_concept": "A classic trolley problem where sacrificing one person saves five.",
+                    "stakeholders": [
+                        {"name": "group", "role": "citizens", "interests": ["survival"], "relationship": "STRANGER"}
+                    ]
+                }
+            }
+        },
+        {
+            "tick": 3,
+            "event": "Social contagion tick",
+            "action": "run_tick"
+        },
+        {
+            "tick": 4,
+            "event": "An external ideological shock hits the society",
+            "action": "introduce_external_shock",
+            "parameters": {
+                "shock_type": "IDEOLOGICAL_BOMB",
+                "text": "A charismatic leader preaches that absolute adherence to rules is the only path to a just society.",
+                "genome": {"deontological": 1.0, "utilitarian": 0.0, "virtue": 0.0}
+            }
+        },
+        {
+            "tick": 5,
+            "event": "Final state observation",
+            "action": "run_tick"
+        }
+    ]
+}
